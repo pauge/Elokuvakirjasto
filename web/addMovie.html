@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<h1>Lisää elokuva</h1>
+<section ng-controller="MovieController">
+    <form name="addForm">
+        Nimi: <input name="name" type="text" ng-model="name" required ng-pattern="/^[a-z,A-Z,0-9]{2,}$/"><br>
+        <div ng-show="addForm.name.$invalid && addForm.name.$dirty">Kenttä täytetty väärin</div>
+        
+        Ohjaaja: <input name="director" type="text" ng-model="director" required ng-pattern="/^[a-z,A-Z]{2,}$/"><br>
+        <div ng-show="addForm.director.$invalid && addForm.director.$dirty">Kenttä täytetty väärin</div>
+        
+        Vuosi:  <input name="year" type="text" ng-model="release" required ng-pattern="/^[1-2][0-9]{3,}$/"><br>
+        <div ng-show="addForm.year.$invalid && addForm.year.$dirty">Kenttä täytetty väärin</div>
+        
+        Kuvaus: <input name="description" type="text" ng-model="description" ng-pattern="/^[a-z,A-Z]{2,}$/"><br>
+        <div ng-show="addForm.description.$invalid && addForm.description.$dirty">Kenttä täytetty väärin</div>
+        <button type="submit" ng-click="send()" ng-disabled="addForm.$invalid">Submit</button>
+    </form>
+</section>

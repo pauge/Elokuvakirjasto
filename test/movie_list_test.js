@@ -4,27 +4,40 @@ describe('Movie list', function(){
 	var FirebaseServiceMock;
 
   	beforeEach(function(){
-  		// Lisää moduulisi nimi tähän
-    	module('MyAwesomeModule');
+    	module('MovieLib');
 
     	FirebaseServiceMock = (function(){
+            var movielist = [{ name:'leffa1',
+                            director :'d1',
+                            release: '1999',
+                            description: 'good'
+                        },{
+                            name:'leffa2',
+                            director :'d2',
+                            release: '2000',
+                            description: 'better'
+                        }];
 			return {
-				// Toteuta FirebaseServicen mockatut metodit tähän
+				getMovies : function() {
+                                    return movielist;
+                                },
+                                addMovie : function(movie) {
+                                    movielist.push(movie);
+                                }
 			}
 		})();
 
-    	// Injektoi toteuttamasi kontrolleri tähän
+
+	    spyOn(FirebaseServiceMock, 'getMovies').andCallThrough();
+    	
 	    inject(function($controller, $rootScope) {
 	      scope = $rootScope.$new();
-	      // Muista vaihtaa oikea kontrollerin nimi!
-	      controller = $controller('MyAwesomeController', {
+	      controller = $controller('MovieController', {
 	        $scope: scope,
 	        FirebaseService: FirebaseServiceMock
 	      });
 	    });
 
-	    // Lisää vakoilijat
-	    // spyOn(FirebaseServiceMock, 'jokuFunktio');
   	});
 
   	/*
@@ -37,7 +50,8 @@ describe('Movie list', function(){
   	* käyttämällä toBeCalled-oletusta.
   	*/ 
 	it('should list all movies from the Firebase', function(){
-		expect(true).toBe(false);
+		expect(scope.movies.length).toBe(2);
+                expect(FirebaseServiceMock.getMovies).toHaveBeenCalled();
 	});
 
 	/* 

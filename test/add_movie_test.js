@@ -4,27 +4,40 @@ describe('Add movie', function(){
 	var FirebaseServiceMock;
 
   	beforeEach(function(){
-  		// Lisää moduulisi nimi tähän
-    	module('MyAwesomeModule');
+  	
+    	module('MovieLib');
 
     	FirebaseServiceMock = (function(){
-			return {
-				// Toteuta FirebaseServicen mockatut metodit tähän
-			}
+            var movies = [{ name:'leffa1',
+                            director :'d1',
+                            release: '1999',
+                            description: 'good'
+                        },{
+                            name:'leffa2',
+                            director :'d2',
+                            release: '2000',
+                            description: 'better'
+                        }];
+            return {
+                       getMovies : function() {
+                           return movies;
+                       },
+                       addMovie : function(movie) {
+                           movies.push(movie);
+                       }
+            }
 		})();
 
-    	// Injektoi toteuttamasi kontrolleri tähän
+            spyOn(FirebaseServiceMock, 'addMovie').andCallThrough();
+    	
 	    inject(function($controller, $rootScope) {
 	      scope = $rootScope.$new();
-	      // Muista vaihtaa oikea kontrollerin nimi!
-	      controller = $controller('MyAwesomeController', {
+	      controller = $controller('MovieController', {
 	        $scope: scope,
 	        FirebaseService: FirebaseServiceMock
 	      });
 	    });
 
-	    // Lisää vakoilijat
-	    // spyOn(FirebaseServiceMock, 'jokuFunktio');
   	});
 
   	/*
@@ -38,7 +51,14 @@ describe('Add movie', function(){
   	* toBeCalled-oletusta.
 	*/
 	it('should be able to add a movie by its name, director, release date and description', function(){
-		expect(true).toBe(false);
+                
+                scope.name = 'leffa3';
+                scope.director = 'd3';
+                scope.release = '2001';
+                scope.description = 'best';
+                scope.send();
+                expect(FirebaseServiceMock.addMovie).toHaveBeenCalled();
+		expect(scope.movies.length).toBe(3);
 	});
 
 	/*	
